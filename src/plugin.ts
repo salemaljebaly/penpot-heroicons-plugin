@@ -1,4 +1,4 @@
-penpot.ui.open("Auto Icon Finder for Heroicons", `?theme=${penpot.theme}`);
+penpot.ui.open("Heroicons", `?theme=${penpot.theme}`);
 
 // Listener for messages from the UI
 penpot.ui.onMessage<string>((message) => {
