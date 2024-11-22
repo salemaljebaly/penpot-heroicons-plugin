@@ -1,0 +1,6 @@
+{
+  "name": "Auto Icon Finder for Heroicons",
+  "description": "Search and insert Heroicons directly into Penpot.",
+  "code": "/plugin.js",
+  "permissions": ["content:read", "content:write"]
+}
