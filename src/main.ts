@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     iconList.forEach((iconName) => {
       const iconElement = document.createElement("div");
       iconElement.classList.add("icon-item");
+      iconElement.setAttribute("title", iconName.replace('.svg', '')); // Tooltip with icon name
 
       fetch(`${baseUrl}${iconName}`)
         .then((response) => response.text())
