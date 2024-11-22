@@ -1,11 +1,5 @@
 import "./style.css";
 
-async function fetchIconList(style: 'outline' | 'solid'): Promise<string[]> {
-  const response = await fetch(`https://api.github.com/repos/tailwindlabs/heroicons/contents/src/24/${style}`);
-  const data = await response.json();
-  return data.map((item: { name: string }) => item.name);
-}
-
 // Get the current theme from the URL
 const searchParams = new URLSearchParams(window.location.search);
 document.body.dataset.theme = searchParams.get("theme") ?? "light";
