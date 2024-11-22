@@ -1,15 +1,12 @@
 import "./style.css";
-
-// Get the current theme from the URL
-const searchParams = new URLSearchParams(window.location.search);
-document.body.dataset.theme = searchParams.get("theme") ?? "light";
+import { iconNames } from "./icons"; // Import the list of icons
 
 document.addEventListener("DOMContentLoaded", async () => {
   const searchBox = document.getElementById("search-box") as HTMLInputElement;
   const iconContainer = document.getElementById("icon-container") as HTMLElement;
 
   // Load all icons on startup
-  await loadAllIcons();
+  loadAllIcons();
 
   searchBox.addEventListener("input", function () {
     const query = searchBox.value.toLowerCase().trim();
@@ -23,22 +20,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  async function loadAllIcons() {
+  function loadAllIcons() {
     iconContainer.innerHTML = ""; // Clear the container
-    const icons = await fetchIconList("solid");
-    displayIcons(icons);
+    displayIcons(iconNames);
   }
 
-  async function fetchIcons(query: string) {
-    const icons = await fetchIconList("solid");
-    const matchingIcons = icons.filter((iconName) => iconName.includes(query));
+  function fetchIcons(query: string) {
+    const matchingIcons = iconNames.filter((iconName) => iconName.includes(query));
     displayIcons(matchingIcons);
-  }
-
-  async function fetchIconList(style: "outline" | "solid"): Promise<string[]> {
-    const response = await fetch(`https://api.github.com/repos/tailwindlabs/heroicons/contents/src/24/${style}`);
-    const data = await response.json();
-    return data.map((item: { name: string }) => item.name);
   }
 
   function displayIcons(iconList: string[]) {
@@ -63,14 +52,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           iconContainer.appendChild(iconElement);
         })
-        .catch((error) => console.error("Error fetching icon:", error));
+        .catch((error) => {
+          console.error(`Error fetching icon "${iconName}":`, error);
+        });
     });
   }
-
-  // Listen for theme changes from plugin.ts
-  window.addEventListener("message", (event) => {
-    if (event.data.source === "penpot") {
-      document.body.dataset.theme = event.data.theme;
-    }
-  });
 });
