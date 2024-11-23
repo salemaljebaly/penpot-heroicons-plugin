@@ -1,33 +1,15 @@
 // Import Penpot plugin SDK
-penpot.ui.open("Penpot plugin starter template", `?theme=${penpot.theme}`);
+penpot.ui.open("Penpot Plugin: Icon Manager", `?theme=${penpot.theme}`);
 
 penpot.ui.onMessage<string>((message) => {
   if (message.startsWith("add-icon:")) {
-    // Extract SVG content from the message
     const svgContent = message.replace("add-icon:", "");
 
-    if (svgContent.includes("<svg")) {
-      // Create the shape from SVG content using the Penpot API
-      const createdShape = penpot.createShapeFromSvg(svgContent);
-
-      if (createdShape) {
-        // Set the position of the newly created shape to the viewport's center
-        createdShape.x = penpot.viewport.center.x;
-        createdShape.y = penpot.viewport.center.y;
-
-        // Set the created shape as the currently selected element
-        penpot.selection = [createdShape];
-        console.log("Icon added to the Penpot board.");
-      } else {
-        console.error("Failed to create the shape from the SVG content.");
-      }
-    } else {
-      console.error("Invalid SVG content received.");
-    }
+    addIconToBoard(svgContent);
   }
 });
 
-// Update the theme in the iframe
+// Event listener for theme change in Penpot
 penpot.on("themechange", (theme) => {
   penpot.ui.sendMessage({
     source: "penpot",
@@ -35,3 +17,28 @@ penpot.on("themechange", (theme) => {
     theme,
   });
 });
+
+/**
+ * Adds an icon to the Penpot board from provided SVG content.
+ * @param svgContent The SVG content to create the icon from.
+ */
+function addIconToBoard(svgContent: string) {
+  if (!svgContent.includes("<svg")) {
+    console.error("Invalid SVG content received.");
+    return;
+  }
+
+  const createdShape = penpot.createShapeFromSvg(svgContent);
+
+  if (createdShape) {
+    // Set the position to the viewport's center
+    createdShape.x = penpot.viewport.center.x;
+    createdShape.y = penpot.viewport.center.y;
+
+    // Set the created shape as the currently selected element
+    penpot.selection = [createdShape];
+    console.log("Icon added to the Penpot board.");
+  } else {
+    console.error("Failed to create the shape from the SVG content.");
+  }
+}
