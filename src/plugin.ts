@@ -1,5 +1,5 @@
 // Import Penpot plugin SDK
-penpot.ui.open("Penpot Plugin: Icon Manager", `?theme=${penpot.theme}`);
+penpot.ui.open("Heroicons Plugin", `?theme=${penpot.theme}`);
 
 penpot.ui.onMessage<string>((message) => {
   if (message.startsWith("add-icon:")) {
