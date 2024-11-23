@@ -2,17 +2,37 @@ import "./style.css";
 import { iconNames } from "./icons"; // Import the list of icons
 
 const solidIconDirectory = "/assets/icons/solid/"; // Relative path from the server root
+const outlineIconDirectory = "/assets/icons/outline/"; // Relative path for outline icons
+
+let currentIconMode = "solid"; // Default icon mode is solid
 
 document.addEventListener("DOMContentLoaded", async () => {
   const searchBox = document.getElementById("search-box") as HTMLInputElement;
   const iconContainer = document.getElementById("icon-container") as HTMLElement;
+  const solidTab = document.getElementById("solid-tab") as HTMLElement;
+  const outlineTab = document.getElementById("outline-tab") as HTMLElement;
 
-  if (!searchBox || !iconContainer) {
+  if (!searchBox || !iconContainer || !solidTab || !outlineTab) {
     console.error("Required elements are missing in the DOM.");
     return;
   }
 
   console.log("DOM fully loaded and parsed.");
+
+  // Set up tab switching functionality
+  solidTab.addEventListener("click", () => {
+    currentIconMode = "solid";
+    solidTab.classList.add("active-tab");
+    outlineTab.classList.remove("active-tab");
+    loadAllIcons();
+  });
+
+  outlineTab.addEventListener("click", () => {
+    currentIconMode = "outline";
+    outlineTab.classList.add("active-tab");
+    solidTab.classList.remove("active-tab");
+    loadAllIcons();
+  });
 
   // Load all icons on startup
   loadAllIcons();
@@ -52,6 +72,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    const iconDirectory = currentIconMode === "solid" ? solidIconDirectory : outlineIconDirectory;
+
     iconList.forEach((iconName) => {
       const iconElement = document.createElement("div");
       iconElement.classList.add("icon-item");
@@ -59,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Create an <img> element to directly reference the SVG file
       const iconImg = document.createElement("img");
-      const iconPath = `${solidIconDirectory}${iconName}`;
+      const iconPath = `${iconDirectory}${iconName}`;
       console.log(`Setting image source to: ${iconPath}`);
 
       iconImg.src = iconPath; // Directly set the source to the SVG path
